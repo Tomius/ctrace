@@ -9,18 +9,20 @@ namespace ctrace {
 template<typename Material>
 struct Triangle {
   Material material;
-  vec3 a, b, c, normal;
+  Vector a, b, c, normal;
 
   // CCW
   constexpr Triangle(Material const& material,
-                     vec3 const& a, vec3 const& b, vec3 const& c)
+                     Vector const& a, Vector const& b, Vector const& c)
     : material(material), a(a), b(b), c(c) {
-      vec3 ab = b - a;
-      vec3 ac = c - a;
+      Vector ab = b - a;
+      Vector ac = c - a;
       normal = normalize(cross(normalize(ab), normalize(ac)));
   }
 
-  constexpr Fragment intersectRay(Ray r, Fragment const& previous) const {
+  template<typename LightContainer>
+  constexpr Fragment intersectRay(Ray const& r, LightContainer const& lights,
+                                  Fragment const& previous) const {
     float divisor = dot(r.direction, normal);
     if (divisor == 0.0f) {
       return previous;
@@ -31,44 +33,48 @@ struct Triangle {
       return previous;
     }
 
-    vec3 plane_intersection = r.origin + ray_travel_dist * r.direction;
+    Vector plane_intersection = r.origin + ray_travel_dist * r.direction;
 
-    const vec3& x = plane_intersection;
+    const Vector& x = plane_intersection;
 
-    vec3 ab = b - a;
-    vec3 ax = x - a;
+    Vector ab = b - a;
+    Vector ax = x - a;
 
-    vec3 bc = c - b;
-    vec3 bx = x - b;
+    Vector bc = c - b;
+    Vector bx = x - b;
 
-    vec3 ca = a - c;
-    vec3 cx = x - c;
+    Vector ca = a - c;
+    Vector cx = x - c;
 
     if(dot(cross(ab, ax), normal) >= 0)
       if(dot(cross(bc, bx), normal) >= 0)
         if(dot(cross(ca, cx), normal) >= 0)
-          return handleIntersection(ray_travel_dist, x, normal, previous);
+          return handleIntersection(ray_travel_dist, x, normal, lights, previous);
 
 
     return previous;
   }
 
+  template<typename LightContainer>
   constexpr Fragment handleIntersection(float ray_travel_dist,
-                                        vec3 const& pos,
-                                        vec3 const& normal,
+                                        Vector const& pos,
+                                        Vector const& normal,
+                                        LightContainer const& lights,
                                         Fragment const& previous) const {
     if (0 < previous.distance_from_eye &&
         previous.distance_from_eye < ray_travel_dist) {
       return previous;
     } else {
-      return Fragment{ray_travel_dist, material.getColor(pos, normal)};
+      return Fragment{ray_travel_dist, lights.calulateLighting(material, pos, normal)};
     }
   }
 };
 
 template<typename Material>
-constexpr Triangle<Material> makeTriangle(Material const& material, vec3 const& a,
-                                          vec3 const& b, vec3 const& c) {
+constexpr Triangle<Material> makeTriangle(Material const& material,
+                                          Vector const& a,
+                                          Vector const& b,
+                                          Vector const& c) {
   return {material, a, b, c};
 }
 

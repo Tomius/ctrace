@@ -30,39 +30,60 @@ struct vec3 {
   constexpr vec3 operator/(vec3 const& v) const {
     return vec3{x / v.x, y / v.y, z / v.z};
   }
+};
 
-  friend constexpr vec3 operator+(float f, const vec3& v) { return v+f; }
-  friend constexpr vec3 operator-(float f, const vec3& v) { return vec3{f}-v; }
-  friend constexpr vec3 operator*(float f, const vec3& v) { return v*f; }
-  friend constexpr vec3 operator/(float f, const vec3& v) { return vec3{f}/v; }
+using Vector = vec3;
+using Color = vec3;
 
-  friend constexpr float dot(const vec3& lhs, const vec3& rhs) {
-    return lhs.x*rhs.x + lhs.y*rhs.y + lhs.z*rhs.z;
-  }
+constexpr vec3 operator+(float f, vec3 const& v) { return v+f; }
+constexpr vec3 operator-(float f, vec3 const& v) { return vec3{f}-v; }
+constexpr vec3 operator*(float f, vec3 const& v) { return v*f; }
+constexpr vec3 operator/(float f, vec3 const& v) { return vec3{f}/v; }
 
-  friend constexpr vec3 cross(const vec3& lhs, const vec3& rhs) {
-    return vec3{lhs.y*rhs.z - lhs.z*rhs.y,
+constexpr float dot(Vector const& lhs, Vector const& rhs) {
+  return lhs.x*rhs.x + lhs.y*rhs.y + lhs.z*rhs.z;
+}
+
+constexpr Vector cross(Vector const& lhs, Vector const& rhs) {
+  return Vector{lhs.y*rhs.z - lhs.z*rhs.y,
                 lhs.z*rhs.x - lhs.x*rhs.z,
                 lhs.x*rhs.y - lhs.y*rhs.x};
-  }
+}
 
-  friend constexpr float length(const vec3& v) {
-    return sqrt(dot(v, v));
-  }
+constexpr float length(Vector const& v) {
+  return sqrt(dot(v, v));
+}
 
-  friend constexpr vec3 normalize(const vec3& v) {
-    float l = length(v);
-    if(l > 1e-3) {
-      return (v/l);
-    } else {
-      return vec3();
-    }
+constexpr Vector normalize(Vector const& v) {
+  float l = length(v);
+  if(l > kEpsilon) {
+    return (v/l);
+  } else {
+    return Vector();
   }
+}
 
-  friend constexpr bool isNull(const vec3& v) {
-    return length(v) < 1e-3;
-  }
-};
+constexpr bool isNull(Vector const& v) {
+  return length(v) < kEpsilon;
+}
+
+constexpr vec3 min(Vector const& lhs, Vector const& rhs) {
+  return vec3{min(lhs.x, rhs.x), min(lhs.y, rhs.y), min(lhs.z, rhs.z)};
+}
+
+constexpr vec3 max(Vector const& lhs, Vector const& rhs) {
+  return vec3{max(lhs.x, rhs.x), max(lhs.y, rhs.y), max(lhs.z, rhs.z)};
+}
+
+constexpr vec3 square(Vector const& v) {
+  return vec3{square(v.x), square(v.y), square(v.z)};
+}
+
+constexpr Color toneMap(Color const& color) {
+  Color x = max(0, color-0.004);
+  Color srgb = (x*(6.2*x+0.5))/(x*(6.2*x+1.7)+0.06);
+  return square(srgb);
+}
 
 }
 

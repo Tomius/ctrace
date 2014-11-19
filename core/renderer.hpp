@@ -5,11 +5,11 @@
 
 namespace ctrace {
 
-constexpr vec3 colorOfPixel(int x, int y) {
+constexpr Color colorOfPixel(int x, int y) {
   return camera.capturePixel(x, y, scene);
 }
 
-constexpr vec3 colorOfPixel(int n) {
+constexpr Color colorOfPixel(int n) {
   return colorOfPixel(n % kScreenWidth, n / kScreenWidth);
 }
 

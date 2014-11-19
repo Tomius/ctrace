@@ -5,15 +5,24 @@
 
 namespace ctrace {
 
-template <typename Objects>
+template <typename ObjectContainer, typename LightContainer>
 struct Scene {
-  Objects objects;
-  constexpr Scene(Objects objects) : objects(objects) {}
+  ObjectContainer objects;
+  LightContainer lights;
+  constexpr Scene(ObjectContainer const& objects,
+                  LightContainer const& lights)
+    : objects(objects), lights(lights) {}
 
-  constexpr vec3 shootRay(Ray const& ray) const {
-    return objects.intersectRay(ray, Fragment{}).color;
+  constexpr Color shootRay(Ray const& ray) const {
+    return toneMap(objects.intersectRay(ray, lights, Fragment{}).color);
   }
 };
+
+template <typename ObjectContainer, typename LightContainer>
+constexpr Scene<ObjectContainer, LightContainer>
+makeScene(ObjectContainer const& objects, LightContainer const& lights) {
+  return {objects, lights};
+}
 
 }
 

@@ -1,15 +1,14 @@
-#ifndef PIXEL_ARRAY_1000_HPP_
-#define PIXEL_ARRAY_1000_HPP_
+#ifndef SCREEN_PIXEL_ARRAY_1000_HPP_
+#define SCREEN_PIXEL_ARRAY_1000_HPP_
 
-#include "../core/renderer.hpp"
+#include "./pixel_array.hpp"
 
 namespace ctrace {
 
-// PixelArray1000<N> defines an N element array of pixels. N must be 1000x + 1.
 template<int N>
-struct PixelArray1000 {
-  PixelArray1000<N-1000> contained;
-  vec3 pixels[1000];
+struct PixelArray<N, std::enable_if_t<1000 < N>> {
+  PixelArray<N-1000> contained;
+  Color pixels[1000];
 
   #define INIT(START_NUM) \
      colorOfPixel(N-1000+25*START_NUM+ 0), colorOfPixel(N-1000+25*START_NUM+ 1) \
@@ -26,22 +25,14 @@ struct PixelArray1000 {
     ,colorOfPixel(N-1000+25*START_NUM+22), colorOfPixel(N-1000+25*START_NUM+23) \
     ,colorOfPixel(N-1000+25*START_NUM+24)
 
-  constexpr PixelArray1000()
+  constexpr PixelArray()
       : pixels{INIT( 0), INIT( 1), INIT( 2), INIT( 3), INIT( 4) , INIT( 5), INIT( 6), INIT( 7), INIT( 8), INIT( 9),
                INIT(10), INIT(11), INIT(12), INIT(13), INIT(14) , INIT(15), INIT(16), INIT(17), INIT(18), INIT(19),
                INIT(20), INIT(21), INIT(22), INIT(23), INIT(24) , INIT(25), INIT(26), INIT(27), INIT(28), INIT(29),
-               INIT(30), INIT(31), INIT(32), INIT(33), INIT(34) , INIT(35), INIT(36), INIT(37), INIT(38), INIT(39)} {
-    static_assert((N-1) % 1000 == 0, "N must be 1000x + 1");
-  }
-};
+               INIT(30), INIT(31), INIT(32), INIT(33), INIT(34) , INIT(35), INIT(36), INIT(37), INIT(38), INIT(39)} {}
 
-template<>
-struct PixelArray1000<1> {
-  vec3 pixel;
-  constexpr PixelArray1000() : pixel{colorOfPixel(0)} {}
+  #undef INIT
 };
-
-using Screen = PixelArray1000<kScreenWidth*kScreenHeight+1>;
 
 }
 
