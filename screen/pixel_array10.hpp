@@ -6,9 +6,11 @@
 namespace ctrace {
 
 template<int N>
-struct PixelArray<N, std::enable_if_t<10 < N && N <= 100>> {
+class PixelArray<N, std::enable_if_t<10 < N && N <= 100>> {
   PixelArray<N-10> contained;
   Color pixels[10];
+
+ public:
   constexpr PixelArray()
       : pixels{colorOfPixel(N-10), colorOfPixel(N-9),
                colorOfPixel(N-8), colorOfPixel(N-7),

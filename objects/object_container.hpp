@@ -7,10 +7,8 @@
 namespace ctrace {
 
 template<int N, typename T, typename... Args>
-struct ObjectContainer {
-  ObjectContainer<N-1, Args...> contained;
-  T current;
-
+class ObjectContainer {
+ public:
   constexpr ObjectContainer(T const& current,
                             ObjectContainer<N-1, Args...> const& contained)
     : current(current), contained(contained) {}
@@ -18,15 +16,18 @@ struct ObjectContainer {
   template <typename LightContainer>
   constexpr Fragment intersectRay(Ray const& ray, LightContainer const& lights,
                                   Fragment const& previous) const {
-    return contained.intersectRay(ray, lights,
-                                  current.intersectRay(ray, lights, previous));
+    Fragment previous2 = current.intersectRay(ray, lights, previous);
+    return contained.intersectRay(ray, lights, previous2);
   }
+
+ private:
+  ObjectContainer<N-1, Args...> contained;
+  T current;
 };
 
 template<typename T>
 struct ObjectContainer<1, T> {
-  T current;
-
+ public:
   constexpr ObjectContainer(T const& current) : current(current) {}
 
   template <typename LightContainer>
@@ -34,6 +35,9 @@ struct ObjectContainer<1, T> {
                                   Fragment const& previous) const {
     return current.intersectRay(ray, lights, previous);
   }
+
+ private:
+  T current;
 };
 
 template<typename T, typename... Args>

@@ -5,12 +5,8 @@
 
 namespace ctrace {
 
-constexpr Color colorOfPixel(int x, int y) {
-  return camera.capturePixel(x, y, scene);
-}
-
 constexpr Color colorOfPixel(int n) {
-  return colorOfPixel(n % kScreenWidth, n / kScreenWidth);
+  return camera.capturePixel(n % kScreenWidth, n / kScreenWidth, scene);
 }
 
 }

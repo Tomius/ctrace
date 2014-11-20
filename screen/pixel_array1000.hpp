@@ -6,11 +6,11 @@
 namespace ctrace {
 
 template<int N>
-struct PixelArray<N, std::enable_if_t<1000 < N>> {
+class PixelArray<N, std::enable_if_t<1000 < N>> {
   PixelArray<N-1000> contained;
   Color pixels[1000];
 
-  #define INIT(START_NUM) \
+  #define __INIT(START_NUM) \
      colorOfPixel(N-1000+25*START_NUM+ 0), colorOfPixel(N-1000+25*START_NUM+ 1) \
     ,colorOfPixel(N-1000+25*START_NUM+ 2), colorOfPixel(N-1000+25*START_NUM+ 3) \
     ,colorOfPixel(N-1000+25*START_NUM+ 4), colorOfPixel(N-1000+25*START_NUM+ 5) \
@@ -25,13 +25,18 @@ struct PixelArray<N, std::enable_if_t<1000 < N>> {
     ,colorOfPixel(N-1000+25*START_NUM+22), colorOfPixel(N-1000+25*START_NUM+23) \
     ,colorOfPixel(N-1000+25*START_NUM+24)
 
+public:
   constexpr PixelArray()
-      : pixels{INIT( 0), INIT( 1), INIT( 2), INIT( 3), INIT( 4) , INIT( 5), INIT( 6), INIT( 7), INIT( 8), INIT( 9),
-               INIT(10), INIT(11), INIT(12), INIT(13), INIT(14) , INIT(15), INIT(16), INIT(17), INIT(18), INIT(19),
-               INIT(20), INIT(21), INIT(22), INIT(23), INIT(24) , INIT(25), INIT(26), INIT(27), INIT(28), INIT(29),
-               INIT(30), INIT(31), INIT(32), INIT(33), INIT(34) , INIT(35), INIT(36), INIT(37), INIT(38), INIT(39)} {}
+      : pixels{__INIT( 0), __INIT( 1), __INIT( 2), __INIT( 3), __INIT( 4),
+               __INIT( 5), __INIT( 6), __INIT( 7), __INIT( 8), __INIT( 9),
+               __INIT(10), __INIT(11), __INIT(12), __INIT(13), __INIT(14),
+               __INIT(15), __INIT(16), __INIT(17), __INIT(18), __INIT(19),
+               __INIT(20), __INIT(21), __INIT(22), __INIT(23), __INIT(24),
+               __INIT(25), __INIT(26), __INIT(27), __INIT(28), __INIT(29),
+               __INIT(30), __INIT(31), __INIT(32), __INIT(33), __INIT(34),
+               __INIT(35), __INIT(36), __INIT(37), __INIT(38), __INIT(39)} {}
 
-  #undef INIT
+  #undef __INIT
 };
 
 }

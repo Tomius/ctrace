@@ -6,9 +6,8 @@
 
 namespace ctrace {
 
-struct Camera {
-  Vector pos, plane_pos, right, up;
-
+class Camera {
+ public:
   constexpr Camera(float fov, Vector const& eye,
                    Vector const& target, Vector const& plane_up)
       : pos(eye), plane_pos(eye + normalize(target-eye)) {
@@ -33,6 +32,9 @@ struct Camera {
     Ray r = {pos, normalize(plane_intersection - pos)};
     return scene.shootRay(r);
   }
+
+ private:
+  Vector pos, plane_pos, right, up;
 };
 
 }

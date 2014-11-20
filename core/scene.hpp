@@ -6,9 +6,8 @@
 namespace ctrace {
 
 template <typename ObjectContainer, typename LightContainer>
-struct Scene {
-  ObjectContainer objects;
-  LightContainer lights;
+class Scene {
+ public:
   constexpr Scene(ObjectContainer const& objects,
                   LightContainer const& lights)
     : objects(objects), lights(lights) {}
@@ -16,6 +15,10 @@ struct Scene {
   constexpr Color shootRay(Ray const& ray) const {
     return toneMap(objects.intersectRay(ray, lights, Fragment{}).color);
   }
+
+ private:
+  ObjectContainer objects;
+  LightContainer lights;
 };
 
 template <typename ObjectContainer, typename LightContainer>

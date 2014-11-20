@@ -13,7 +13,7 @@ namespace ctrace {
 // 1001 can be turned into 2 array (1*1000 + terminator),
 // while 1000 needs 28 template (9*100 + 9*10 + 9*1 + terminator),
 // so overall using an array of 1001 is much faster than 1000
-struct Screen : public PixelArray<kScreenWidth*kScreenHeight+1> {
+struct Screen : private PixelArray<kScreenWidth*kScreenHeight+1> {
   constexpr Screen() {}
   Color const* pixels() const {
     return reinterpret_cast<Color const*>(this);

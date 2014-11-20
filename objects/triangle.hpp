@@ -8,13 +8,11 @@ namespace ctrace {
 
 template<typename Material>
 struct Triangle {
-  Material material;
-  Vector a, b, c, normal;
-
-  // CCW
+ public:
+  // The points of the triangle are understood in CCW order
   constexpr Triangle(Material const& material,
                      Vector const& a, Vector const& b, Vector const& c)
-    : material(material), a(a), b(b), c(c) {
+    : material{material}, a{a}, b{b}, c{c} {
       Vector ab = b - a;
       Vector ac = c - a;
       normal = normalize(cross(normalize(ab), normalize(ac)));
@@ -54,6 +52,10 @@ struct Triangle {
 
     return previous;
   }
+
+ private:
+  Material material;
+  Vector a, b, c, normal;
 
   template<typename LightContainer>
   constexpr Fragment handleIntersection(float ray_travel_dist,

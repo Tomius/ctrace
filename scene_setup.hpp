@@ -5,6 +5,8 @@
 #include "core/camera.hpp"
 #include "materials/diffuse_material.hpp"
 #include "objects/triangle.hpp"
+#include "objects/quad.hpp"
+#include "objects/cuboid.hpp"
 #include "objects/object_container.hpp"
 #include "lights/light_container.hpp"
 
@@ -15,33 +17,13 @@ constexpr DiffuseMaterial grey{Color{0.3f}};
 
 constexpr auto scene = makeScene(
 makeObjectContainer(
-  // cube front face
-  makeTriangle(yellow, Vector{+1, -1, -1}, Vector{-1, -1, -1}, Vector{-1, +1, -1}),
-  makeTriangle(yellow, Vector{-1, +1, -1}, Vector{+1, +1, -1}, Vector{+1, -1, -1}),
-
-  // cube back face
-  makeTriangle(yellow, Vector{+1, -1, +1}, Vector{-1, -1, +1}, Vector{-1, +1, +1}),
-  makeTriangle(yellow, Vector{-1, +1, +1}, Vector{+1, +1, +1}, Vector{+1, -1, +1}),
-
-  // cube right face
-  makeTriangle(yellow, Vector{+1, -1, -1}, Vector{+1, -1, +1}, Vector{+1, +1, +1}),
-  makeTriangle(yellow, Vector{+1, +1, +1}, Vector{+1, +1, -1}, Vector{+1, -1, -1}),
-
-  // cube left face
-  makeTriangle(yellow, Vector{-1, +1, +1}, Vector{-1, +1, -1}, Vector{-1, -1, -1}),
-  makeTriangle(yellow, Vector{-1, -1, -1}, Vector{-1, -1, +1}, Vector{-1, +1, +1}),
-
-  // cube upper face
-  makeTriangle(yellow, Vector{-1, +1, -1}, Vector{-1, +1, +1}, Vector{+1, +1, +1}),
-  makeTriangle(yellow, Vector{+1, +1, -1}, Vector{-1, +1, -1}, Vector{+1, +1, +1}),
-
-  // cube lower face
-  makeTriangle(yellow, Vector{-1, -1, +1}, Vector{-1, -1, -1}, Vector{+1, -1, +1}),
-  makeTriangle(yellow, Vector{+1, -1, -1}, Vector{+1, -1, +1}, Vector{-1, -1, -1}),
+  // the yellow cube
+  makeCuboid(yellow, Vector{+1, +1, -1}, Vector{+1, +1, +1},
+                     Vector{+1, -1, -1}, Vector{-1, +1, -1}),
 
   // floor
-  makeTriangle(grey, Vector{-10, -1, -10}, Vector{-10, -1, +10}, Vector{+10, -1, +10}),
-  makeTriangle(grey, Vector{+10, -1, -10}, Vector{-10, -1, -10}, Vector{+10, -1, +10})
+  makeQuad(grey, Vector{-10, -1, -10}, Vector{-10, -1, +10},
+                 Vector{+10, -1, +10}, Vector{+10, -1, -10})
 ),
 makeLightContainer(
   AmbientLight{Color{0.1f, 0.1f, 0.1f}},

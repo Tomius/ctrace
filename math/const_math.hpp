@@ -15,9 +15,9 @@ namespace ctrace {
 #define M_E    2.718281828459045
 #endif
 
-constexpr float kEpsilon = 0.001;
+constexpr float kEpsilon = 0.001f;
 
-constexpr float abs(float x) { return x < 0.0 ? -x : x; }
+constexpr float abs(float x) { return x < 0.0f ? -x : x; }
 
 constexpr float min(float a, float b) { return a < b ? a : b; }
 
@@ -26,16 +26,16 @@ constexpr float max(float a, float b) { return a < b ? b : a; }
 constexpr float square(float x) { return x*x; }
 
 constexpr float sqrt_helper(float x, float g) {
-  return abs(g-x/g) < kEpsilon ? g : sqrt_helper(x,(g+x/g)/2.0);
+  return abs(g - x/g) < kEpsilon ? g : sqrt_helper(x, (g + x/g) / 2.0f);
 }
 
-constexpr float sqrt(float x) { return sqrt_helper(x,1.0); }
+constexpr float sqrt(float x) { return sqrt_helper(x, 1.0f); }
 
 constexpr float cube(float x) { return x*x*x; }
 
 // Based on the triple-angle formula: sin 3x = 3 sin x - 4 sin ^3 x
 constexpr float sin_helper(float x) {
-  return x < kEpsilon ? x : 3*(sin_helper(x/3.0)) - 4*cube(sin_helper(x/3.0));
+  return x < kEpsilon ? x : 3*(sin_helper(x/3)) - 4*cube(sin_helper(x/3));
 }
 
 constexpr float sin(float x) {
@@ -45,13 +45,6 @@ constexpr float sin(float x) {
 constexpr float cos(float x) { return sin(M_PI_2 - x); }
 
 constexpr float tan(float x) { return sin(x) / cos(x); }
-
-constexpr float pow(float base, int exponent) {
-  return exponent <  0 ? 1.0 / pow(base,-exponent) :
-         exponent == 0 ? 1.                        :
-         exponent == 1 ? base                      :
-         base * pow(base,exponent-1);
-}
 
 }
 

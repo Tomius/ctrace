@@ -6,10 +6,8 @@
 namespace ctrace {
 
 template<int N, typename T, typename... Args>
-struct LightContainer {
-  LightContainer<N-1, Args...> contained;
-  T current;
-
+class LightContainer {
+ public:
   constexpr LightContainer(T const& current,
                             LightContainer<N-1, Args...> const& contained)
     : current(current), contained(contained) {}
@@ -21,20 +19,25 @@ struct LightContainer {
     return material.getColor(pos, normal, current)
            + contained.calulateLighting(material, pos, normal);
   }
+
+ private:
+  LightContainer<N-1, Args...> contained;
+  T current;
 };
 
 template<typename T>
-struct LightContainer<1, T> {
-  T current;
-
+class LightContainer<1, T> {
+ public:
   constexpr LightContainer(T const& current) : current(current) {}
 
-  // not quite OO, but it's easier this way
   template<typename Material>
   constexpr Color calulateLighting(Material const& material,
                                    Color const& pos, Color const& normal) const {
     return material.getColor(pos, normal, current);
   }
+
+ private:
+  T current;
 };
 
 template<typename T, typename... Args>

@@ -3,21 +3,19 @@
 
 namespace ctrace {
 
-struct Light { constexpr Light() {} };
-
-struct AmbientLight : Light{
+struct AmbientLight {
   Color color;
   constexpr AmbientLight(Color const& color) : color(color) {}
 };
 
-struct DirectionalLight : Light {
+struct DirectionalLight {
   Vector dir;
   Color color;
   constexpr DirectionalLight(Vector const& dir, Color const& color)
       : dir(dir), color(color) {}
 };
 
-struct PointLight : Light {
+struct PointLight {
   Vector pos;
   Color color;
   constexpr PointLight(Vector const& pos, Color const& color)
