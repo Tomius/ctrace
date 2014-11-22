@@ -19,20 +19,20 @@ class DiffuseMaterial {
 
   constexpr Color getColor(Color const& pos, Color const& normal,
                            DirectionalLight const& light) const {
-    float normal_light_dot = dot(normal, normalize(light.dir));
+    real normal_light_dot = dot(normal, normalize(light.dir));
     if (double_sided) {
-      return abs(normal_light_dot) * own_color;
+      return abs(normal_light_dot) * own_color * light.color;
     } else {
-      return max(normal_light_dot, 0) * own_color;
+      return max(normal_light_dot, 0) * own_color * light.color;
     }
   }
 
   constexpr Color getColor(Color const& pos, Color const& normal,
                            PointLight const& light) const {
     Vector pos_to_light = light.pos - pos;
-    float attenuation = square(1/length(pos_to_light));
-    float normal_light_dot = dot(normal, normalize(pos_to_light));
-    float intensity =
+    real attenuation = square(1/length(pos_to_light));
+    real normal_light_dot = dot(normal, normalize(pos_to_light));
+    real intensity =
         double_sided ? abs(normal_light_dot) : max(normal_light_dot, 0);
     return attenuation * intensity * light.color * own_color;
   }

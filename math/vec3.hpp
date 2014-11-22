@@ -1,20 +1,18 @@
 #ifndef MATH_VEC3_HPP_
 #define MATH_VEC3_HPP_
 
-#include <cmath>
-#include <cstdint>
 #include "./const_math.hpp"
 
 namespace ctrace {
 
 struct vec3 {
-  union { float x, r; }; // we want to reference this field with either .x or .r
-  union { float y, g; };
-  union { float z, b; };
+  union { real x, r; }; // we want to reference this field with either .x or .r
+  union { real y, g; };
+  union { real z, b; };
 
   // ctors
-  constexpr vec3(float v=0) : x(v), y(v), z(v) {}
-  constexpr vec3(float x, float y, float z) : x(x), y(y), z(z) {}
+  constexpr vec3(real v=0) : x(v), y(v), z(v) {}
+  constexpr vec3(real x, real y, real z) : x(x), y(y), z(z) {}
   constexpr vec3(vec3 const& rhs) : x(rhs.x), y(rhs.y), z(rhs.z) {}
 
   // +-*/
@@ -35,12 +33,12 @@ struct vec3 {
 using Vector = vec3;
 using Color = vec3;
 
-constexpr vec3 operator+(float f, vec3 const& v) { return v+f; }
-constexpr vec3 operator-(float f, vec3 const& v) { return vec3{f}-v; }
-constexpr vec3 operator*(float f, vec3 const& v) { return v*f; }
-constexpr vec3 operator/(float f, vec3 const& v) { return vec3{f}/v; }
+constexpr vec3 operator+(real f, vec3 const& v) { return v+f; }
+constexpr vec3 operator-(real f, vec3 const& v) { return vec3{f}-v; }
+constexpr vec3 operator*(real f, vec3 const& v) { return v*f; }
+constexpr vec3 operator/(real f, vec3 const& v) { return vec3{f}/v; }
 
-constexpr float dot(Vector const& lhs, Vector const& rhs) {
+constexpr real dot(Vector const& lhs, Vector const& rhs) {
   return lhs.x*rhs.x + lhs.y*rhs.y + lhs.z*rhs.z;
 }
 
@@ -50,12 +48,12 @@ constexpr Vector cross(Vector const& lhs, Vector const& rhs) {
                 lhs.x*rhs.y - lhs.y*rhs.x};
 }
 
-constexpr float length(Vector const& v) {
+constexpr real length(Vector const& v) {
   return sqrt(dot(v, v));
 }
 
 constexpr Vector normalize(Vector const& v) {
-  float l = length(v);
+  real l = length(v);
   if(l > kEpsilon) {
     return (v/l);
   } else {

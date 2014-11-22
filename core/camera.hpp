@@ -8,18 +8,18 @@ namespace ctrace {
 
 class Camera {
  public:
-  constexpr Camera(float fov, Vector const& eye,
+  constexpr Camera(real fov, Vector const& eye,
                    Vector const& target, Vector const& plane_up)
       : pos(eye), plane_pos(eye + normalize(target-eye)) {
     Vector fwd = normalize(plane_pos - pos);
-    float plane_half_size = tan((fov*M_PI/180)/2);
+    real plane_half_size = tan((fov*M_PI/180)/2);
 
     right = plane_half_size * normalize(cross(fwd, plane_up));
     up = plane_half_size * normalize(cross(right, fwd));
   }
 
   template<typename Scene>
-  constexpr Color capturePixel(float x, float y, Scene const& scene) const {
+  constexpr Color capturePixel(real x, real y, Scene const& scene) const {
     Vector pos_on_plane = Vector{
       (x - kScreenWidth/2) / (kScreenWidth/2),
       (kScreenHeight/2 - y) / (kScreenHeight/2),

@@ -14,10 +14,10 @@ struct Ray {
 
 struct Fragment {
   // if negative, the intersection is considered invalid.
-  float distance_from_eye = -1;
+  real distance_from_eye = -1;
   Color color = kBackgroundColor;
   constexpr Fragment() {}
-  constexpr Fragment(float distance_from_eye, Color const& color)
+  constexpr Fragment(real distance_from_eye, Color const& color)
       : distance_from_eye(distance_from_eye), color(color) {}
 };
 

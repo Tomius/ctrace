@@ -14,6 +14,14 @@ class PixelArray<N, std::enable_if_t<1 < N && N <= 10>> {
   constexpr PixelArray() : pixel{colorOfPixel(N-1)} { }
 };
 
+template<>
+class PixelArray<1, void> {
+  Color pixel;
+
+ public:
+  constexpr PixelArray() : pixel{colorOfPixel(0)} {}
+};
+
 }
 
 #endif

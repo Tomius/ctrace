@@ -9,15 +9,11 @@ namespace ctrace {
 template<int N, typename Enable = void>
 class PixelArray;
 
-template<>
-class PixelArray<1, void> {
-  Color pixel;
-
- public:
-  constexpr PixelArray() : pixel{colorOfPixel(0)} {}
-};
-
-
 }
+
+#include "./pixel_array1.hpp"
+#include "./pixel_array10.hpp"
+#include "./pixel_array100.hpp"
+#include "./pixel_array1000.hpp"
 
 #endif
