@@ -45,7 +45,7 @@ class Cuboid {
 
  private:
   // Calculated values
-  Vector c, f, g, h;
+  Position c, f, g, h;
 
   // who needs arrays anyways...
   Quad<Material> quad0, quad1, quad2, quad3, quad4, quad5;
@@ -53,8 +53,8 @@ class Cuboid {
 
 template<typename Material>
 constexpr Cuboid<Material> makeCuboid(Material const& material,
-                                      Vector const& a, Vector const& b,
-                                      Vector const& d, Vector const& e) {
+                                      Position const& a, Position const& b,
+                                      Position const& d, Position const& e) {
   return {material, a, b, d, e};
 }
 

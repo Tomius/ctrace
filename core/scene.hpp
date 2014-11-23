@@ -10,15 +10,15 @@ class Scene {
  public:
   constexpr Scene(ObjectContainer const& objects,
                   LightContainer const& lights)
-    : objects(objects), lights(lights) {}
+    : objects_(objects), lights_(lights) {}
 
   constexpr Color shootRay(Ray const& ray) const {
-    return toneMap(objects.intersectRay(ray, lights, Fragment{}).color);
+    return toneMap(objects_.intersectRay(ray, lights_, Fragment{}).color);
   }
 
  private:
-  ObjectContainer objects;
-  LightContainer lights;
+  ObjectContainer objects_;
+  LightContainer lights_;
 };
 
 template <typename ObjectContainer, typename LightContainer>

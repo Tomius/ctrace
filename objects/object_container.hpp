@@ -6,49 +6,52 @@
 
 namespace ctrace {
 
-template<int N, typename T, typename... Args>
+template<int N, typename FirstObject, typename... Rest>
 class ObjectContainer {
  public:
-  constexpr ObjectContainer(T const& current,
-                            ObjectContainer<N-1, Args...> const& contained)
-    : current(current), contained(contained) {}
+  constexpr ObjectContainer(FirstObject const& first_object,
+                            ObjectContainer<N-1, Rest...> const& rest)
+    : rest_(rest), first_object_(first_object) {}
 
+  // Not quite a KD-tree
   template <typename LightContainer>
-  constexpr Fragment intersectRay(Ray const& ray, LightContainer const& lights,
+  constexpr Fragment intersectRay(Ray const& ray,
+                                  LightContainer const& lights,
                                   Fragment const& previous) const {
-    Fragment previous2 = current.intersectRay(ray, lights, previous);
-    return contained.intersectRay(ray, lights, previous2);
+    Fragment previous2 = first_object_.intersectRay(ray, lights, previous);
+    return rest_.intersectRay(ray, lights, previous2);
   }
 
  private:
-  ObjectContainer<N-1, Args...> contained;
-  T current;
+  ObjectContainer<N-1, Rest...> rest_;
+  FirstObject first_object_;
 };
 
-template<typename T>
-struct ObjectContainer<1, T> {
+template<typename Object>
+struct ObjectContainer<1, Object> {
  public:
-  constexpr ObjectContainer(T const& current) : current(current) {}
+  constexpr ObjectContainer(Object const& object) : object_(object) {}
 
   template <typename LightContainer>
-  constexpr Fragment intersectRay(Ray const& ray, LightContainer const& lights,
+  constexpr Fragment intersectRay(Ray const& ray,
+                                  LightContainer const& lights,
                                   Fragment const& previous) const {
-    return current.intersectRay(ray, lights, previous);
+    return object_.intersectRay(ray, lights, previous);
   }
 
  private:
-  T current;
+  Object object_;
 };
 
-template<typename T, typename... Args>
-constexpr ObjectContainer<sizeof...(Args)+1, T, Args...>
-makeObjectContainer(T const& first, Args const&... args) {
-  return {first, makeObjectContainer(args...)};
+template<typename FirstObject, typename... Rest>
+constexpr ObjectContainer<sizeof...(Rest)+1, FirstObject, Rest...>
+makeObjectContainer(FirstObject const& first_object, Rest const&... rest) {
+  return {first_object, makeObjectContainer(rest...)};
 }
 
-template<typename T>
-constexpr ObjectContainer<1, T> makeObjectContainer(T const& value) {
-  return {value};
+template<typename Object>
+constexpr ObjectContainer<1, Object> makeObjectContainer(Object const& object) {
+  return {object};
 }
 
 }

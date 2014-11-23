@@ -10,36 +10,36 @@ class DiffuseMaterial {
  public:
   constexpr DiffuseMaterial(Color const& color,
                             bool double_sided = false)
-      : own_color(color), double_sided(double_sided) {}
+      : own_color_(color), double_sided_(double_sided) {}
 
-  constexpr Color getColor(Color const&, Color const&,
+  constexpr Color getColor(Position const&, Direction const&,
                            AmbientLight const& light) const {
-    return own_color * light.color;
+    return own_color_ * light.color;
   }
 
-  constexpr Color getColor(Color const& pos, Color const& normal,
+  constexpr Color getColor(Position const& pos, Direction const& normal,
                            DirectionalLight const& light) const {
     real normal_light_dot = dot(normal, normalize(light.dir));
-    if (double_sided) {
-      return abs(normal_light_dot) * own_color * light.color;
+    if (double_sided_) {
+      return abs(normal_light_dot) * own_color_ * light.color;
     } else {
-      return max(normal_light_dot, 0) * own_color * light.color;
+      return max(normal_light_dot, 0) * own_color_ * light.color;
     }
   }
 
-  constexpr Color getColor(Color const& pos, Color const& normal,
+  constexpr Color getColor(Position const& pos, Direction const& normal,
                            PointLight const& light) const {
-    Vector pos_to_light = light.pos - pos;
+    Direction pos_to_light = light.pos - pos;
     real attenuation = square(1/length(pos_to_light));
     real normal_light_dot = dot(normal, normalize(pos_to_light));
     real intensity =
-        double_sided ? abs(normal_light_dot) : max(normal_light_dot, 0);
-    return attenuation * intensity * light.color * own_color;
+        double_sided_ ? abs(normal_light_dot) : max(normal_light_dot, 0);
+    return attenuation * intensity * light.color * own_color_;
   }
 
  private:
-  Color own_color;
-  bool double_sided;
+  Color own_color_;
+  bool double_sided_;
 };
 
 }

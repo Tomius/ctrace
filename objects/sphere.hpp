@@ -8,14 +8,15 @@ namespace ctrace {
 template<typename Material>
 class Sphere {
  public:
-  constexpr Sphere(Material const& material, Vector const& center, real radius)
+  constexpr Sphere(Material const& material, Position const& center, real radius)
       : material_(material), center_(center), radius_(radius) {}
 
   template<typename LightContainer>
-  constexpr Fragment intersectRay(Ray const& ray, LightContainer const& lights,
+  constexpr Fragment intersectRay(Ray const& ray,
+                                  LightContainer const& lights,
                                   Fragment const& previous) const {
     // a simple quadratic equtions for the ray_travel_dist
-    Vector c2o = ray.origin - center_;
+    Direction c2o = ray.origin - center_;
     real a = dot(ray.direction, ray.direction);
     real b = 2 * dot(ray.direction, c2o);
     real c = dot(c2o, c2o) - radius_*radius_;
@@ -35,8 +36,8 @@ class Sphere {
       return previous;
     }
 
-    Vector pos = ray.origin + ray_travel_dist*ray.direction;
-    Vector normal = normalize(pos - center_);
+    Position pos = ray.origin + ray_travel_dist*ray.direction;
+    Direction normal = normalize(pos - center_);
 
     return Fragment{ray_travel_dist,
                     lights.calulateLighting(material_, pos, normal)};
@@ -44,14 +45,14 @@ class Sphere {
 
  private:
   Material material_;
-  Vector center_;
+  Position center_;
   real radius_;
 };
 
 
 template<typename Material>
 constexpr Sphere<Material> makeSphere(Material const& material,
-                                      Vector const& center, real radius) {
+                                      Position const& center, real radius) {
   return {material, center, radius};
 }
 

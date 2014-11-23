@@ -31,6 +31,8 @@ struct vec3 {
 };
 
 using Vector = vec3;
+using Position = Vector;
+using Direction = Vector;
 using Color = vec3;
 
 constexpr vec3 operator+(real f, vec3 const& v) { return v+f; }
@@ -78,9 +80,10 @@ constexpr vec3 square(Vector const& v) {
 }
 
 constexpr Color toneMap(Color const& color) {
-  Color x = max(0, color-0.004);
-  Color srgb = (x*(6.2*x+0.5))/(x*(6.2*x+1.7)+0.06);
-  return square(srgb);
+  return color;
+  // Color x = max(0, color-0.004);
+  // Color srgb = (x*(6.2*x+0.5))/(x*(6.2*x+1.7)+0.06);
+  // return square(srgb);
 }
 
 }

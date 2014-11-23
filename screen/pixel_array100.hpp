@@ -7,8 +7,8 @@ namespace ctrace {
 
 template<int N>
 class PixelArray<N, std::enable_if_t<100 < N && N <= 1000>> {
-  PixelArray<N-100> contained;
-  Color pixels[100];
+  PixelArray<N-100> contained_;
+  Color pixels_[100];
 
   #define __INIT(START_NUM) \
      colorOfPixel(N-100+10*START_NUM+0), colorOfPixel(N-100+10*START_NUM+1) \
@@ -19,8 +19,8 @@ class PixelArray<N, std::enable_if_t<100 < N && N <= 1000>> {
 
  public:
   constexpr PixelArray()
-      : pixels{__INIT(0), __INIT(1), __INIT(2), __INIT(3), __INIT(4),
-               __INIT(5), __INIT(6), __INIT(7), __INIT(8), __INIT(9)} {}
+      : pixels_{__INIT(0), __INIT(1), __INIT(2), __INIT(3), __INIT(4),
+                __INIT(5), __INIT(6), __INIT(7), __INIT(8), __INIT(9)} {}
 
   #undef __INIT
 };

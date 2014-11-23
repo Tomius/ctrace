@@ -10,46 +10,48 @@ struct Triangle {
  public:
   // The points of the triangle are understood in CCW order
   constexpr Triangle(Material const& material,
-                     Vector const& a, Vector const& b, Vector const& c)
-    : material{material}, a{a}, b{b}, c{c} {
-      Vector ab = b - a;
-      Vector ac = c - a;
-      normal = normalize(cross(normalize(ab), normalize(ac)));
+                     Position const& a, Position const& b, Position const& c)
+      : material_{material}, a_{a}, b_{b}, c_{c} {
+    Direction ab = b_ - a_;
+    Direction ac = c_ - a_;
+    normal_ = normalize(cross(normalize(ab), normalize(ac)));
   }
 
   template<typename LightContainer>
-  constexpr Fragment intersectRay(Ray const& r, LightContainer const& lights,
+  constexpr Fragment intersectRay(Ray const& r,
+                                  LightContainer const& lights,
                                   Fragment const& previous) const {
-    real divisor = dot(r.direction, normal);
+    real divisor = dot(r.direction, normal_);
     if (divisor == 0.0f) {
       return previous;
     }
 
-    real ray_travel_dist = dot(a - r.origin, normal) / divisor;
+    real ray_travel_dist = dot(a_ - r.origin, normal_) / divisor;
     if(ray_travel_dist < 0 || (0 < previous.distance_from_eye &&
         previous.distance_from_eye < ray_travel_dist)) {
       return previous;
     }
 
-    Vector plane_intersection = r.origin + ray_travel_dist * r.direction;
+    Position plane_intersection = r.origin + ray_travel_dist * r.direction;
 
-    const Vector& x = plane_intersection;
-    Vector ab = b - a, ax = x - a;
-    Vector bc = c - b, bx = x - b;
-    Vector ca = a - c, cx = x - c;
+    const Position& x = plane_intersection;
+    Direction ab = b_ - a_, ax = x - a_;
+    Direction bc = c_ - b_, bx = x - b_;
+    Direction ca = a_ - c_, cx = x - c_;
 
-    if(dot(cross(ab, ax), normal) >= 0)
-      if(dot(cross(bc, bx), normal) >= 0)
-        if(dot(cross(ca, cx), normal) >= 0)
+    if(dot(cross(ab, ax), normal_) >= 0)
+      if(dot(cross(bc, bx), normal_) >= 0)
+        if(dot(cross(ca, cx), normal_) >= 0)
           return Fragment{ray_travel_dist,
-                          lights.calulateLighting(material, x, normal)};
+                          lights.calulateLighting(material_, x, normal_)};
 
     return previous;
   }
 
  private:
-  Material material;
-  Vector a, b, c, normal;
+  Material material_;
+  Position a_, b_, c_;
+  Direction normal_;
 };
 
 template<typename Material>
