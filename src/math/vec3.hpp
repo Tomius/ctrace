@@ -5,35 +5,40 @@
 
 namespace ctrace {
 
+// GLSL like vec3
 struct vec3 {
-  union { real x, r; }; // we want to reference this field with either .x or .r
-  union { real y, g; };
-  union { real z, b; };
+  // we want to reference the first field
+  // of a vec3 with either .x, .r or .s
+  union { real x, r, s; };
+  union { real y, g, t; };
+  union { real z, b, p; };
 
   // ctors
   constexpr vec3(real v=0) : x(v), y(v), z(v) {}
   constexpr vec3(real x, real y, real z) : x(x), y(y), z(z) {}
   constexpr vec3(vec3 const& rhs) : x(rhs.x), y(rhs.y), z(rhs.z) {}
-
-  // +-*/
-  constexpr vec3 operator+(vec3 const& v) const {
-    return vec3{x + v.x, y + v.y, z + v.z};
-  }
-  constexpr vec3 operator-(vec3 const& v) const {
-    return vec3{x - v.x, y - v.y, z - v.z};
-  }
-  constexpr vec3 operator*(vec3 const& v) const {
-    return vec3{x * v.x, y * v.y, z * v.z};
-  }
-  constexpr vec3 operator/(vec3 const& v) const {
-    return vec3{x / v.x, y / v.y, z / v.z};
-  }
 };
 
 using Vector = vec3;
 using Position = Vector;
 using Direction = Vector;
 using Color = vec3;
+
+constexpr vec3 operator+(vec3 const& lhs, vec3 const& rhs) {
+  return vec3{lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z};
+}
+
+constexpr vec3 operator-(vec3 const& lhs, vec3 const& rhs) {
+  return vec3{lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z};
+}
+
+constexpr vec3 operator*(vec3 const& lhs, vec3 const& rhs) {
+  return vec3{lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z};
+}
+
+constexpr vec3 operator/(vec3 const& lhs, vec3 const& rhs) {
+  return vec3{lhs.x / rhs.x, lhs.y / rhs.y, lhs.z / rhs.z};
+}
 
 constexpr vec3 operator+(real f, vec3 const& v) { return v+f; }
 constexpr vec3 operator-(real f, vec3 const& v) { return vec3{f}-v; }
@@ -80,10 +85,9 @@ constexpr vec3 square(Vector const& v) {
 }
 
 constexpr Color toneMap(Color const& color) {
-  return color;
-  // Color x = max(0, color-0.004);
-  // Color srgb = (x*(6.2*x+0.5))/(x*(6.2*x+1.7)+0.06);
-  // return square(srgb);
+  Color x = max(0, color-0.004);
+  Color srgb = (x*(6.2*x+0.5))/(x*(6.2*x+1.7)+0.06);
+  return square(srgb); // approximation for the 2.2 exponent
 }
 
 }

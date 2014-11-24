@@ -1,12 +1,13 @@
 #ifndef SCREEN_PIXEL_ARRAY_HPP_
 #define SCREEN_PIXEL_ARRAY_HPP_
 
-#include "../core/renderer.hpp"
+#include "../../core/renderer.hpp"
 
 namespace ctrace {
 
 // PixelArray<N> defines an N element array of pixels.
-template<int N, typename Enable = void>
+// S defines the number of the starting pixel in the array.
+template<int N, int S, typename Enable = void>
 class PixelArray;
 
 }

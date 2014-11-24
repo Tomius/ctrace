@@ -1,7 +1,6 @@
 #ifndef CORE_CAMERA_HPP_
 #define CORE_CAMERA_HPP_
 
-#include "./scene.hpp"
 #include "../scene_settings.hpp"
 
 namespace ctrace {
