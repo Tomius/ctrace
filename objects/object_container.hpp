@@ -13,13 +13,34 @@ class ObjectContainer {
                             ObjectContainer<N-1, Rest...> const& rest)
     : rest_(rest), first_object_(first_object) {}
 
-  // Not quite a KD-tree
+  constexpr Intersection intersectRay(Ray const& ray) const {
+    Intersection intersection = first_object_.intersectRay(ray);
+    return rest_.intersectRay(ray, intersection);
+  }
+
+  constexpr Color intersectRay(Ray const& ray,
+                               Intersection const& previous) const {
+    return closer_one_of(first_object_.intersectRay(ray), previous);
+  }
+
   template <typename LightContainer>
-  constexpr Fragment intersectRay(Ray const& ray,
-                                  LightContainer const& lights,
-                                  Fragment const& previous) const {
-    Fragment previous2 = first_object_.intersectRay(ray, lights, previous);
-    return rest_.intersectRay(ray, lights, previous2);
+  constexpr Color intersectRay(Ray const& ray,
+                               LightContainer const& lights) const {
+    Intersection intersection = first_object_.intersectRay(ray);
+    return rest_.intersectRay(ray, lights, intersection, first_object_.material());
+  }
+
+  template <typename LightContainer, typename Material>
+  constexpr Color intersectRay(Ray const& ray,
+                               LightContainer const& lights,
+                               Intersection const& previous,
+                               Material const& material) const {
+    Intersection current = first_object_.intersectRay(ray);
+    if (is_first_closer(current, previous)) {
+      return rest_.intersectRay(ray, lights, current, first_object_.material());
+    } else {
+      return rest_.intersectRay(ray, lights, previous, material);
+    }
   }
 
  private:
@@ -32,11 +53,41 @@ struct ObjectContainer<1, Object> {
  public:
   constexpr ObjectContainer(Object const& object) : object_(object) {}
 
+  constexpr Intersection intersectRay(Ray const& ray) const {
+    return object_.intersectRay(ray);
+  }
+
+  constexpr Color intersectRay(Ray const& ray,
+                               Intersection const& previous) const {
+    return closer_one_of(object_.intersectRay(ray), previous);
+  }
+
   template <typename LightContainer>
-  constexpr Fragment intersectRay(Ray const& ray,
-                                  LightContainer const& lights,
-                                  Fragment const& previous) const {
-    return object_.intersectRay(ray, lights, previous);
+  constexpr Color intersectRay(Ray const& ray,
+                               LightContainer const& lights) const {
+    Intersection intersection = object_.intersectRay(ray);
+    if (is_valid(intersection)) {
+      return lights.calulateLighting(object_.material(), intersection);
+    } else {
+      return kBackgroundColor;
+    }
+  }
+
+  template <typename LightContainer, typename Material>
+  constexpr Color intersectRay(Ray const& ray,
+                               LightContainer const& lights,
+                               Intersection const& previous,
+                               Material const& material) const {
+    Intersection current = object_.intersectRay(ray);
+    if (is_first_closer(current, previous)) {
+      return lights.calulateLighting(object_.material(), current);
+    } else {
+      if (is_valid(previous)) {
+        return lights.calulateLighting(material, previous);
+      } else {
+        return kBackgroundColor;
+      }
+    }
   }
 
  private:

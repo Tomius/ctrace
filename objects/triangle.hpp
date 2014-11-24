@@ -17,22 +17,18 @@ struct Triangle {
     normal_ = normalize(cross(normalize(ab), normalize(ac)));
   }
 
-  template<typename LightContainer>
-  constexpr Fragment intersectRay(Ray const& r,
-                                  LightContainer const& lights,
-                                  Fragment const& previous) const {
-    real divisor = dot(r.direction, normal_);
+  constexpr Intersection intersectRay(Ray const& ray) const {
+    real divisor = dot(ray.direction, normal_);
     if (divisor == 0.0f) {
-      return previous;
+      return NoIntersection{};
     }
 
-    real ray_travel_dist = dot(a_ - r.origin, normal_) / divisor;
-    if(ray_travel_dist < 0 || (0 < previous.distance_from_eye &&
-        previous.distance_from_eye < ray_travel_dist)) {
-      return previous;
+    real ray_travel_dist = dot(a_ - ray.origin, normal_) / divisor;
+    if (ray_travel_dist < 0) {
+      return NoIntersection{};
     }
 
-    Position plane_intersection = r.origin + ray_travel_dist * r.direction;
+    Position plane_intersection = ray.origin + ray_travel_dist * ray.direction;
 
     const Position& x = plane_intersection;
     Direction ab = b_ - a_, ax = x - a_;
@@ -42,11 +38,12 @@ struct Triangle {
     if(dot(cross(ab, ax), normal_) >= 0)
       if(dot(cross(bc, bx), normal_) >= 0)
         if(dot(cross(ca, cx), normal_) >= 0)
-          return Fragment{ray_travel_dist,
-                          lights.calulateLighting(material_, x, normal_)};
+          return Intersection{ray_travel_dist, x, normal_};
 
-    return previous;
+    return NoIntersection{};
   }
+
+  constexpr Material material() const { return material_; }
 
  private:
   Material material_;

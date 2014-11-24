@@ -14,11 +14,10 @@ class LightContainer {
 
   template<typename Material>
   constexpr Color calulateLighting(Material const& material,
-                                   Position const& pos,
-                                   Direction const& normal) const {
+                                   Intersection const& intersection) const {
     // the effects of the individual lights are independent, and additive
-    return material.getColor(pos, normal, first_light_)
-           + rest_.calulateLighting(material, pos, normal);
+    return material.getColor(intersection, first_light_)
+           + rest_.calulateLighting(material, intersection);
   }
 
  private:
@@ -33,9 +32,8 @@ class LightContainer<1, Light> {
 
   template<typename Material>
   constexpr Color calulateLighting(Material const& material,
-                                   Position const& pos,
-                                   Direction const& normal) const {
-    return material.getColor(pos, normal, light_);
+                                   Intersection const& intersection) const {
+    return material.getColor(intersection, light_);
   }
 
  private:

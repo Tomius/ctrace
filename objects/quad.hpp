@@ -10,17 +10,16 @@ class Quad {
  public:
   // the winding order of the first triangle should be CCW
   constexpr Quad(Material const& material,
-                  Position const& a, Position const& b,
-                  Position const& c, Position const& d)
+                 Position const& a, Position const& b,
+                 Position const& c, Position const& d)
       : triangle0_(material, a, b, c), triangle1_(material, a, c, d) {}
 
-  template<typename LightContainer>
-  constexpr Fragment intersectRay(Ray const& r,
-                                  LightContainer const& lights,
-                                  Fragment const& previous) const {
-    Fragment previous0 = triangle0_.intersectRay(r, lights, previous);
-    return triangle1_.intersectRay(r, lights, previous0);
+  constexpr Intersection intersectRay(Ray const& ray) const {
+    return closer_one_of(triangle0_.intersectRay(ray),
+                         triangle1_.intersectRay(ray));
   }
+
+  constexpr Material material() const { return triangle0_.material(); }
 
  private:
   Triangle<Material> triangle0_, triangle1_;

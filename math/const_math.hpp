@@ -18,6 +18,8 @@ constexpr real kEpsilon = 0.001;
 
 constexpr real abs(real x) { return x < 0.0 ? -x : x; }
 
+constexpr bool equals(real a, real b) { return abs(a-b) < kEpsilon; }
+
 constexpr real min(real a, real b) { return a < b ? a : b; }
 
 constexpr real max(real a, real b) { return a < b ? b : a; }

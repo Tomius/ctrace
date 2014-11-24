@@ -6,20 +6,35 @@ namespace ctrace {
 struct AmbientLight {
   Color color;
   constexpr AmbientLight(Color const& color) : color(color) {}
+  constexpr bool isVisible(Position const& point) {
+    return true;
+  }
 };
 
 struct DirectionalLight {
-  Vector dir;
+  Direction dir;
   Color color;
-  constexpr DirectionalLight(Vector const& dir, Color const& color)
+  constexpr DirectionalLight(Direction const& dir, Color const& color)
       : dir(dir), color(color) {}
+  // constexpr bool isVisible(Position const& point) {
+  //   Ray shadow_checker = Ray(inter.pos + 1e-3*dir, dir);
+  //   Intersection shadow_checker_int = getClosestIntersection(shadow_checker);
+  //   if(shadow_checker_int.is_valid) {
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // }
 };
 
 struct PointLight {
-  Vector pos;
+  Position pos;
   Color color;
-  constexpr PointLight(Vector const& pos, Color const& color)
+  constexpr PointLight(Position const& pos, Color const& color)
       : pos(pos), color(color) {}
+  // constexpr bool isVisible(Position const& point) {
+  //   return true;
+  // }
 };
 
 }

@@ -12,13 +12,32 @@ struct Ray {
     : origin(origin), direction(direction) {}
 };
 
-struct Fragment {
-  // if negative, the intersection is considered invalid.
-  real distance_from_eye = -1;
-  Color color = kBackgroundColor;
-  constexpr Fragment() {}
-  constexpr Fragment(real distance_from_eye, Color const& color)
-      : distance_from_eye(distance_from_eye), color(color) {}
+struct Intersection {
+  real dist_eye; // distance from eye
+  Position pos;
+  Direction normal;
+
+  constexpr Intersection(real dist_eye, Position const& pos,
+                         Direction const& normal)
+      : dist_eye(dist_eye), pos(pos), normal(normal) {}
+};
+
+constexpr bool is_valid(Intersection const& inter) {
+  return inter.dist_eye >= 0;
+}
+
+constexpr bool is_first_closer(Intersection const& a,
+                               Intersection const& b) {
+  return is_valid(a) && (!is_valid(b) || a.dist_eye < b.dist_eye);
+}
+
+constexpr Intersection closer_one_of(Intersection const& a,
+                                     Intersection const& b) {
+  return is_first_closer(a, b) ? a : b;
+}
+
+struct NoIntersection : public Intersection {
+  constexpr NoIntersection() : Intersection(-1, Position{}, Direction{}){}
 };
 
 }

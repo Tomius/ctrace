@@ -13,7 +13,7 @@ class Scene {
     : objects_(objects), lights_(lights) {}
 
   constexpr Color shootRay(Ray const& ray) const {
-    return toneMap(objects_.intersectRay(ray, lights_, Fragment{}).color);
+    return toneMap(objects_.intersectRay(ray, lights_));
   }
 
  private:
