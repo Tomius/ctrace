@@ -19,22 +19,30 @@ class DiffuseMaterial {
 
   constexpr Color getColor(Intersection const& intersection,
                            DirectionalLight const& light) const {
-    real normal_light_dot = dot(intersection.normal, normalize(light.dir));
-    if (double_sided_) {
-      return abs(normal_light_dot) * own_color_ * light.color;
+    if (isLit(intersection.pos, light)) {
+      real normal_light_dot = dot(intersection.normal, normalize(light.dir));
+      if (double_sided_) {
+        return abs(normal_light_dot) * own_color_ * light.color;
+      } else {
+        return max(normal_light_dot, 0) * own_color_ * light.color;
+      }
     } else {
-      return max(normal_light_dot, 0) * own_color_ * light.color;
+      return Color{};
     }
   }
 
   constexpr Color getColor(Intersection const& intersection,
                            PointLight const& light) const {
-    Direction pos_to_light = light.pos - intersection.pos;
-    real attenuation = square(1/length(pos_to_light));
-    real normal_light_dot = dot(intersection.normal, normalize(pos_to_light));
-    real intensity =
-        double_sided_ ? abs(normal_light_dot) : max(normal_light_dot, 0);
-    return attenuation * intensity * light.color * own_color_;
+    if (isLit(intersection.pos, light)) {
+      Direction pos_to_light = light.pos - intersection.pos;
+      real attenuation = square(1/length(pos_to_light));
+      real normal_light_dot = dot(intersection.normal, normalize(pos_to_light));
+      real intensity =
+          double_sided_ ? abs(normal_light_dot) : max(normal_light_dot, 0);
+      return attenuation * intensity * light.color * own_color_;
+    } else {
+      return Color{};
+    }
   }
 
  private:

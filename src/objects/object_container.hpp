@@ -18,8 +18,8 @@ class ObjectContainer {
     return rest_.intersectRay(ray, intersection);
   }
 
-  constexpr Color intersectRay(Ray const& ray,
-                               Intersection const& previous) const {
+  constexpr Intersection intersectRay(Ray const& ray,
+                                      Intersection const& previous) const {
     return closer_one_of(first_object_.intersectRay(ray), previous);
   }
 
@@ -57,8 +57,8 @@ struct ObjectContainer<1, Object> {
     return object_.intersectRay(ray);
   }
 
-  constexpr Color intersectRay(Ray const& ray,
-                               Intersection const& previous) const {
+  constexpr Intersection intersectRay(Ray const& ray,
+                                      Intersection const& previous) const {
     return closer_one_of(object_.intersectRay(ray), previous);
   }
 

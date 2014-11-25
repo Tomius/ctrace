@@ -7,8 +7,8 @@ HEADERS := $(shell find -L $(SRC_DIR) -name '*.hpp')
 OBJECTS := $(subst $(SRC_DIR),$(OBJ_DIR),$(CPP_FILES:.cpp=.o))
 
 CXX = clang++
-CXXFLAGS = -Wall -std=c++1y -fconstexpr-steps=100000000 -fconstexpr-depth=1000 \
-					 -ftemplate-depth=400 `pkg-config --cflags Magick++` -Qunused-arguments
+CXXFLAGS = -Wall -std=c++1y -fconstexpr-steps=100000000 \
+					 `pkg-config --cflags Magick++` -Qunused-arguments
 LDFLAGS = `pkg-config --libs Magick++`
 
 .PHONY: all clean
