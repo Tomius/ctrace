@@ -14,7 +14,7 @@ class Camera {
     real plane_half_size = tan((fov*M_PI/180)/2);
 
     // the length of the up and the right
-    // vectors are storing the field of view
+    // vectors are storing the field of view too
     right_ = plane_half_size * normalize(cross(fwd, up));
     up_ = plane_half_size * normalize(cross(right_, fwd));
   }

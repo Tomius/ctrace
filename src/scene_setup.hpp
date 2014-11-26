@@ -19,12 +19,11 @@ constexpr DiffuseMaterial grey{Color{0.3}};
 
 constexpr auto scene = makeScene(
   makeObjectContainer(
-    // the blue sphere
-    makeSphere(red, Position{-2.5, +0.75, +2.5}, 1.5),
+    // blue sphere
+    makeSphere(red, Position{-2.5, +0.75, +2.5}, 1.35),
 
-    // the yellow cube
-    makeCuboid(yellow, Position{+1, +1, -1}, Position{+1, +1, +1},
-                       Position{+1, -1, -1}, Position{-1, +1, -1}),
+    // yellow cube
+    makeAxisAlignedCuboid(yellow, Position{}, Vector{15}, false),
 
     // floor
     makeQuad(grey, Position{-10, -1, -10}, Position{-10, -1, +10},

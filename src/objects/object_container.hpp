@@ -20,7 +20,7 @@ class ObjectContainer {
 
   constexpr Intersection intersectRay(Ray const& ray,
                                       Intersection const& previous) const {
-    return closer_one_of(first_object_.intersectRay(ray), previous);
+    return closerOneOf(first_object_.intersectRay(ray), previous);
   }
 
   template <typename LightContainer>
@@ -36,7 +36,7 @@ class ObjectContainer {
                                Intersection const& previous,
                                Material const& material) const {
     Intersection current = first_object_.intersectRay(ray);
-    if (is_first_closer(current, previous)) {
+    if (isFirstCloser(current, previous)) {
       return rest_.intersectRay(ray, lights, current, first_object_.material());
     } else {
       return rest_.intersectRay(ray, lights, previous, material);
@@ -59,14 +59,14 @@ struct ObjectContainer<1, Object> {
 
   constexpr Intersection intersectRay(Ray const& ray,
                                       Intersection const& previous) const {
-    return closer_one_of(object_.intersectRay(ray), previous);
+    return closerOneOf(object_.intersectRay(ray), previous);
   }
 
   template <typename LightContainer>
   constexpr Color intersectRay(Ray const& ray,
                                LightContainer const& lights) const {
     Intersection intersection = object_.intersectRay(ray);
-    if (is_valid(intersection)) {
+    if (isValid(intersection)) {
       return lights.calulateLighting(object_.material(), intersection);
     } else {
       return kBackgroundColor;
@@ -79,10 +79,10 @@ struct ObjectContainer<1, Object> {
                                Intersection const& previous,
                                Material const& material) const {
     Intersection current = object_.intersectRay(ray);
-    if (is_first_closer(current, previous)) {
+    if (isFirstCloser(current, previous)) {
       return lights.calulateLighting(object_.material(), current);
     } else {
-      if (is_valid(previous)) {
+      if (isValid(previous)) {
         return lights.calulateLighting(material, previous);
       } else {
         return kBackgroundColor;

@@ -14,7 +14,7 @@ namespace ctrace {
 
 using real = float;
 
-constexpr real kEpsilon = 0.001;
+constexpr real kEpsilon = 1e-5;
 
 constexpr real abs(real x) { return x < 0.0 ? -x : x; }
 

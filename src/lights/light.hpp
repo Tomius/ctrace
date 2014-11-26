@@ -30,22 +30,21 @@ constexpr bool isLit(Position const& point, AmbientLight const& light) {
   return true;
 }
 
-constexpr bool isLit(Position const& point, Direction const& point2light) {
-  Ray shadow_checker = Ray(point + kEpsilon*point2light, point2light);
-  Intersection shadow_checker_int = intersectRay(shadow_checker);
-  if(is_valid(shadow_checker_int)) {
-    return false;
-  } else {
-    return true;
-  }
-}
-
 constexpr bool isLit(Position const& point, DirectionalLight const& light) {
-  return isLit(point, light.dir);
+  Ray shadow_checker = Ray(point + kEpsilon*light.dir, light.dir);
+  Intersection shadow_checker_int = intersectRay(shadow_checker);
+  return !isValid(shadow_checker_int);
 }
 
 constexpr bool isLit(Position const& point, PointLight const& light) {
-  return isLit(point, normalize(light.pos - point));
+  Vector point2light = light.pos - point, p2ld = normalize(point2light);
+  Ray shadow_checker = Ray(point + kEpsilon*p2ld, p2ld);
+  Intersection shadow_checker_int = intersectRay(shadow_checker);
+  if(isValid(shadow_checker_int)) {
+    return length(point2light) < shadow_checker_int.dist_eye + kEpsilon;
+  } else {
+    return true;
+  }
 }
 
 }

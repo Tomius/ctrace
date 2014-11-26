@@ -8,10 +8,10 @@ namespace ctrace {
 template<typename Material>
 struct Triangle {
  public:
-  // The points of the triangle are understood in CCW order
   constexpr Triangle(Material const& material,
-                     Position const& a, Position const& b, Position const& c)
-      : material_{material}, a_{a}, b_{b}, c_{c} {
+                     Position const& a, Position const& b, Position const& c,
+                     bool ccw = true)
+      : material_{material}, a_{a}, b_{ccw ? b : c}, c_{ccw ? c : b} {
     Direction ab = b_ - a_;
     Direction ac = c_ - a_;
     normal_ = normalize(cross(normalize(ab), normalize(ac)));
@@ -19,7 +19,7 @@ struct Triangle {
 
   constexpr Intersection intersectRay(Ray const& ray) const {
     real divisor = dot(ray.direction, normal_);
-    if (divisor == 0.0f) {
+    if (abs(divisor) < kEpsilon) {
       return NoIntersection{};
     }
 
@@ -53,10 +53,9 @@ struct Triangle {
 
 template<typename Material>
 constexpr Triangle<Material> makeTriangle(Material const& material,
-                                          Vector const& a,
-                                          Vector const& b,
-                                          Vector const& c) {
-  return {material, a, b, c};
+                                          Vector const& a, Vector const& b,
+                                          Vector const& c, bool ccw = true) {
+  return {material, a, b, c, ccw};
 }
 
 }

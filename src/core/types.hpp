@@ -22,18 +22,18 @@ struct Intersection {
       : dist_eye(dist_eye), pos(pos), normal(normal) {}
 };
 
-constexpr bool is_valid(Intersection const& inter) {
+constexpr bool isValid(Intersection const& inter) {
   return inter.dist_eye >= 0;
 }
 
-constexpr bool is_first_closer(Intersection const& a,
-                               Intersection const& b) {
-  return is_valid(a) && (!is_valid(b) || a.dist_eye < b.dist_eye);
+constexpr bool isFirstCloser(Intersection const& a,
+                             Intersection const& b) {
+  return isValid(a) && (!isValid(b) || a.dist_eye < b.dist_eye);
 }
 
-constexpr Intersection closer_one_of(Intersection const& a,
-                                     Intersection const& b) {
-  return is_first_closer(a, b) ? a : b;
+constexpr Intersection closerOneOf(Intersection const& a,
+                                   Intersection const& b) {
+  return isFirstCloser(a, b) ? a : b;
 }
 
 struct NoIntersection : public Intersection {

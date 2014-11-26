@@ -11,12 +11,14 @@ class Quad {
   // the winding order of the first triangle should be CCW
   constexpr Quad(Material const& material,
                  Position const& a, Position const& b,
-                 Position const& c, Position const& d)
-      : triangle0_(material, a, b, c), triangle1_(material, a, c, d) {}
+                 Position const& c, Position const& d,
+                 bool ccw = true)
+      : triangle0_(material, a, b, c, ccw)
+      , triangle1_(material, a, c, d, ccw) {}
 
   constexpr Intersection intersectRay(Ray const& ray) const {
-    return closer_one_of(triangle0_.intersectRay(ray),
-                         triangle1_.intersectRay(ray));
+    return closerOneOf(triangle0_.intersectRay(ray),
+                       triangle1_.intersectRay(ray));
   }
 
   constexpr Material material() const { return triangle0_.material(); }
@@ -28,8 +30,9 @@ class Quad {
 template<typename Material>
 constexpr Quad<Material> makeQuad(Material const& material,
                                   Position const& a, Position const& b,
-                                  Position const& c, Position const& d) {
-  return {material, a, b, c, d};
+                                  Position const& c, Position const& d,
+                                  bool ccw = true) {
+  return {material, a, b, c, d, ccw};
 }
 
 }
