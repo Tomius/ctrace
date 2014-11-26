@@ -17,20 +17,16 @@ class Cuboid {
          | /     | /
          |/      |/
         (G)-----(C)        */
-
-  // The normals are facing outwards.
-  // If you need inward facing normals, use double-sided material.
   constexpr Cuboid(Material const& material,
                    Vector const& a, Vector const& b,
-                   Vector const& d, Vector const& e,
-                   bool outwards_normals = true)
+                   Vector const& d, Vector const& e)
       : c{b+(d-a)}, f{b+(e-a)}, g{c+(e-a)}, h{d+(e-a)}
-      , quad0_{material, a, b, c, d, outwards_normals} // right
-      , quad1_{material, f, e, h, g, outwards_normals} // left
-      , quad2_{material, a, e, f, b, outwards_normals} // up
-      , quad3_{material, c, g, h, d, outwards_normals} // down
-      , quad4_{material, b, f, g, c, outwards_normals} // front
-      , quad5_{material, a, d, h, e, outwards_normals} // back
+      , quad0_{material, a, b, c, d} // right
+      , quad1_{material, f, e, h, g} // left
+      , quad2_{material, a, e, f, b} // up
+      , quad3_{material, c, g, h, d} // down
+      , quad4_{material, b, f, g, c} // front
+      , quad5_{material, a, d, h, e} // back
   {}
 
   constexpr Intersection intersectRay(Ray const& r) const {
@@ -42,7 +38,7 @@ class Cuboid {
     return closerOneOf(quad5_.intersectRay(r), closest4);
   }
 
-  constexpr Material material() const { return quad0_.material(); }
+  constexpr Material const& material() const { return quad0_.material(); }
 
  private:
   // Calculated values
@@ -55,22 +51,19 @@ class Cuboid {
 template<typename Material>
 constexpr Cuboid<Material> makeCuboid(Material const& material,
                                       Position const& a, Position const& b,
-                                      Position const& d, Position const& e,
-                                      bool outwards_normals = true) {
-  return {material, a, b, d, e, outwards_normals};
+                                      Position const& d, Position const& e) {
+  return {material, a, b, d, e};
 }
 
 template<typename Material>
 constexpr Cuboid<Material> makeAxisAlignedCuboid(Material const& material,
                                                  Position const& center,
-                                                 Vector const& edges,
-                                                 bool outwards_normals = true) {
+                                                 Vector const& edges) {
   Vector e2 = edges/2;
   return {
     material,
     center+Position{+1, +1, -1}*e2, center+Position{+1, +1, +1}*e2,
-    center+Position{+1, -1, -1}*e2, center+Position{-1, +1, -1}*e2,
-    outwards_normals
+    center+Position{+1, -1, -1}*e2, center+Position{-1, +1, -1}*e2
   };
 }
 

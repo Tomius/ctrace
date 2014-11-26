@@ -33,11 +33,13 @@ class Sphere {
 
     Position pos = ray.origin + ray_travel_dist*ray.direction;
     Direction normal = normalize(pos - center_);
+    Direction lighting_normal =
+        dot(ray.direction, normal) > 0 ? -1*normal : normal;
 
-    return Intersection{ray_travel_dist, pos, normal};
+    return Intersection{ray_travel_dist, pos, lighting_normal};
   }
 
-  constexpr Material material() const { return material_; }
+  constexpr Material const& material() const { return material_; }
 
  private:
   Material material_;

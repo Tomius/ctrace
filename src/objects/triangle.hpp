@@ -9,9 +9,8 @@ template<typename Material>
 struct Triangle {
  public:
   constexpr Triangle(Material const& material,
-                     Position const& a, Position const& b, Position const& c,
-                     bool ccw = true)
-      : material_{material}, a_{a}, b_{ccw ? b : c}, c_{ccw ? c : b} {
+                     Position const& a, Position const& b, Position const& c)
+      : material_{material}, a_{a}, b_{b}, c_{c} {
     Direction ab = b_ - a_;
     Direction ac = c_ - a_;
     normal_ = normalize(cross(normalize(ab), normalize(ac)));
@@ -28,7 +27,7 @@ struct Triangle {
       return NoIntersection{};
     }
 
-    Position plane_intersection = ray.origin + ray_travel_dist * ray.direction;
+    Position plane_intersection = ray.origin + ray_travel_dist*ray.direction;
 
     const Position& x = plane_intersection;
     Direction ab = b_ - a_, ax = x - a_;
@@ -37,13 +36,15 @@ struct Triangle {
 
     if(dot(cross(ab, ax), normal_) >= 0)
       if(dot(cross(bc, bx), normal_) >= 0)
-        if(dot(cross(ca, cx), normal_) >= 0)
-          return Intersection{ray_travel_dist, x, normal_};
+        if(dot(cross(ca, cx), normal_) >= 0) {
+          Direction lighting_normal = divisor > 0 ? -1*normal_ : normal_;
+          return Intersection{ray_travel_dist, x, lighting_normal};
+        }
 
     return NoIntersection{};
   }
 
-  constexpr Material material() const { return material_; }
+  constexpr Material const& material() const { return material_; }
 
  private:
   Material material_;
@@ -53,9 +54,10 @@ struct Triangle {
 
 template<typename Material>
 constexpr Triangle<Material> makeTriangle(Material const& material,
-                                          Vector const& a, Vector const& b,
-                                          Vector const& c, bool ccw = true) {
-  return {material, a, b, c, ccw};
+                                          Vector const& a,
+                                          Vector const& b,
+                                          Vector const& c) {
+  return {material, a, b, c};
 }
 
 }

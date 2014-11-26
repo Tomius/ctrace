@@ -4,6 +4,7 @@
 #include "core/scene.hpp"
 #include "core/camera.hpp"
 #include "materials/diffuse_material.hpp"
+#include "materials/normal2color_material.hpp"
 #include "objects/triangle.hpp"
 #include "objects/quad.hpp"
 #include "objects/cuboid.hpp"
@@ -13,26 +14,24 @@
 
 namespace ctrace {
 
-constexpr DiffuseMaterial red{Color{0, 0, 1}}; // :D
+constexpr DiffuseMaterial blue{Color{0, 0, 1}};
 constexpr DiffuseMaterial yellow{Color{0.9, 0.8, 0.1}};
-constexpr DiffuseMaterial grey{Color{0.3}};
+constexpr Normal2ColorMaterial normal_material{};
 
 constexpr auto scene = makeScene(
   makeObjectContainer(
     // blue sphere
-    makeSphere(red, Position{-2.5, +0.75, +2.5}, 1.35),
+    makeSphere(blue, Position{-2.5, +1.35, +2.5}, 1.35),
 
-    // yellow cube
-    makeAxisAlignedCuboid(yellow, Position{}, Vector{15}, false),
+    // the containing cube
+    makeAxisAlignedCuboid(normal_material, Position{0, 7.5, 0}, Vector{15}),
 
-    // floor
-    makeQuad(grey, Position{-10, -1, -10}, Position{-10, -1, +10},
-                   Position{+10, -1, +10}, Position{+10, -1, -10})
+    // the small yellow cube
+    makeAxisAlignedCuboid(yellow, Position{0, 0.75, 0}, Vector{1.5})
   ),
 
   makeLightContainer(
     AmbientLight{Color{0.1, 0.1, 0.1}},
-    DirectionalLight{Direction{+1.2, 1, -0.8}, Color{0.25, 0.25, 0.25}},
     PointLight{Position{-1.5, 2, 0}, Color{5, 4, 3}}
   ),
 
