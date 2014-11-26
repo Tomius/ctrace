@@ -2,21 +2,15 @@
 #define SCENE_SETUP_HPP_
 
 #include "core/scene.hpp"
-#include "core/camera.hpp"
-#include "materials/diffuse_material.hpp"
-#include "materials/normal2color_material.hpp"
-#include "objects/triangle.hpp"
-#include "objects/quad.hpp"
-#include "objects/cuboid.hpp"
-#include "objects/sphere.hpp"
-#include "objects/object_container.hpp"
+#include "objects/objects.hpp"
 #include "lights/light_container.hpp"
+#include "materials/diffuse_material.hpp"
 
 namespace ctrace {
 
-constexpr DiffuseMaterial blue{Color{0, 0, 1}};
-constexpr DiffuseMaterial yellow{Color{0.9, 0.8, 0.1}};
-constexpr Normal2ColorMaterial normal_material{};
+constexpr auto blue = makeDiffuseMaterial(SimpleColorMapper{Color{0, 0, 1}});
+constexpr auto yellow = makeDiffuseMaterial(SimpleColorMapper{Color{0.9, 0.8, 0.1}});
+constexpr auto normal_material = makeDiffuseMaterial(NormalVectorColorMapper<2>{});
 
 constexpr auto scene = makeScene(
   makeObjectContainer(

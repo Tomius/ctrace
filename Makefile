@@ -11,9 +11,14 @@ CXXFLAGS = -Wall -std=c++1y -fconstexpr-steps=100000000 \
 					 `pkg-config --cflags Magick++` -Qunused-arguments
 LDFLAGS = `pkg-config --libs Magick++`
 
-.PHONY: all clean
+.PHONY: all me a sandwich clean
 
 all: $(BINARY)
+
+# sudo make me a sandwich -j4
+me: $(BINARY)
+a: $(BINARY)
+sandwich: $(BINARY)
 
 clean:
 	@$(info Cleaning up)
