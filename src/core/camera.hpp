@@ -35,7 +35,7 @@ class Camera {
   }
 
  private:
-  Position eye_pos_, plane_pos_;
+  const Position eye_pos_, plane_pos_;
   Direction right_, up_;
 };
 

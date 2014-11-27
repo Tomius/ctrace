@@ -20,7 +20,8 @@ class ObjectContainer {
 
   constexpr Intersection intersectRay(Ray const& ray,
                                       Intersection const& previous) const {
-    return closerOneOf(first_object_.intersectRay(ray), previous);
+    Intersection current = closerOneOf(first_object_.intersectRay(ray), previous);
+    return rest_.intersectRay(ray, current);
   }
 
   template <typename LightContainer>
@@ -44,8 +45,8 @@ class ObjectContainer {
   }
 
  private:
-  ObjectContainer<N-1, Rest...> rest_;
-  FirstObject first_object_;
+  const ObjectContainer<N-1, Rest...> rest_;
+  const FirstObject first_object_;
 };
 
 template<typename Object>
@@ -91,7 +92,7 @@ struct ObjectContainer<1, Object> {
   }
 
  private:
-  Object object_;
+  const Object object_;
 };
 
 template<typename FirstObject, typename... Rest>

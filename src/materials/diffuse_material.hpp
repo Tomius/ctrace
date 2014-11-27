@@ -34,7 +34,8 @@ class DiffuseMaterial {
                            PointLight const& light) const {
     if (isLit(intersection.pos, light)) {
       Direction pos_to_light = light.pos - intersection.pos;
-      real attenuation = square(1/length(pos_to_light));
+      real distance = length(pos_to_light);
+      real attenuation = 1/(0.1*square(distance) + distance + 1);
       real normal_light_dot = dot(intersection.normal, normalize(pos_to_light));
       real intensity = max(normal_light_dot, 0);
       Color diffuseColor = color_mapper_.diffuseColor(intersection);
@@ -45,7 +46,7 @@ class DiffuseMaterial {
   }
 
  private:
-  ColorMapper color_mapper_;
+  const ColorMapper color_mapper_;
 };
 
 template <typename ColorMapper = SimpleColorMapper>

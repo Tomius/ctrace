@@ -42,9 +42,9 @@ class Sphere {
   constexpr Material const& material() const { return material_; }
 
  private:
-  Material material_;
-  Position center_;
-  real radius_;
+  const Material material_;
+  const Position center_;
+  const real radius_;
 };
 
 

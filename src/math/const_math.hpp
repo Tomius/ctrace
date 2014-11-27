@@ -12,7 +12,7 @@
 
 namespace ctrace {
 
-using real = float;
+using real = double;
 
 constexpr real kEpsilon = 1e-5;
 

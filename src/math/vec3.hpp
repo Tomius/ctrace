@@ -9,20 +9,22 @@ namespace ctrace {
 struct vec3 {
   // we want to reference the first field
   // of a vec3 with either .x, .r or .s
-  union { real x, r, s; };
-  union { real y, g, t; };
-  union { real z, b, p; };
+  const union { real x, r, s; };
+  const union { real y, g, t; };
+  const union { real z, b, p; };
 
   // ctors
   constexpr vec3(real v=0) : x(v), y(v), z(v) {}
   constexpr vec3(real x, real y, real z) : x(x), y(y), z(z) {}
-  constexpr vec3(vec3 const& rhs) : x(rhs.x), y(rhs.y), z(rhs.z) {}
 };
 
 using Vector = vec3;
 using Position = Vector;
 using Direction = Vector;
 using Color = vec3;
+
+// These might be useful at some point
+constexpr Direction kAxisX{1, 0, 0}, kAxisY{0, 1, 0}, kAxisZ{0, 0, 1};
 
 constexpr vec3 operator+(vec3 const& lhs, vec3 const& rhs) {
   return vec3{lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z};

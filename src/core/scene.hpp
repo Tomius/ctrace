@@ -27,9 +27,9 @@ class Scene {
   constexpr Camera const& camera() const { return camera_; }
 
  private:
-  ObjectContainer objects_;
-  LightContainer lights_;
-  Camera camera_;
+  const ObjectContainer objects_;
+  const LightContainer lights_;
+  const Camera camera_;
 };
 
 template <typename ObjectContainer, typename LightContainer>

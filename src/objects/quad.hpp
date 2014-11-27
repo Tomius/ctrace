@@ -12,8 +12,8 @@ class Quad {
   constexpr Quad(Material const& material,
                  Position const& a, Position const& b,
                  Position const& c, Position const& d)
-      : triangle0_(material, a, b, c)
-      , triangle1_(material, a, c, d) {}
+      : triangle0_{material, a, b, c}
+      , triangle1_{material, a, c, d} {}
 
   constexpr Intersection intersectRay(Ray const& ray) const {
     return closerOneOf(triangle0_.intersectRay(ray),
@@ -23,7 +23,7 @@ class Quad {
   constexpr Material const& material() const { return triangle0_.material(); }
 
  private:
-  Triangle<Material> triangle0_, triangle1_;
+  const Triangle<Material> triangle0_, triangle1_;
 };
 
 template<typename Material>

@@ -7,15 +7,15 @@
 namespace ctrace {
 
 struct Ray {
-  Vector origin, direction;
+  const Vector origin, direction;
   constexpr Ray(Vector const& origin, Vector const& direction)
     : origin(origin), direction(direction) {}
 };
 
 struct Intersection {
-  real dist_eye; // distance from eye
-  Position pos;
-  Direction normal;
+  const real dist_eye; // distance from eye
+  const Position pos;
+  const Direction normal;
 
   constexpr Intersection(real dist_eye, Position const& pos,
                          Direction const& normal)
@@ -37,7 +37,7 @@ constexpr Intersection closerOneOf(Intersection const& a,
 }
 
 struct NoIntersection : public Intersection {
-  constexpr NoIntersection() : Intersection(-1, Position{}, Direction{}){}
+  constexpr NoIntersection() : Intersection{-1, Position{}, Direction{}}{}
 };
 
 }

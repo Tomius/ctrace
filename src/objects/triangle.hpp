@@ -10,11 +10,8 @@ struct Triangle {
  public:
   constexpr Triangle(Material const& material,
                      Position const& a, Position const& b, Position const& c)
-      : material_{material}, a_{a}, b_{b}, c_{c} {
-    Direction ab = b_ - a_;
-    Direction ac = c_ - a_;
-    normal_ = normalize(cross(normalize(ab), normalize(ac)));
-  }
+      : material_{material}, a_{a}, b_{b}, c_{c}
+      , normal_{normalize(cross(normalize(b_ - a_), normalize(c_ - a_)))} {}
 
   constexpr Intersection intersectRay(Ray const& ray) const {
     real divisor = dot(ray.direction, normal_);
@@ -47,9 +44,9 @@ struct Triangle {
   constexpr Material const& material() const { return material_; }
 
  private:
-  Material material_;
-  Position a_, b_, c_;
-  Direction normal_;
+  const Material material_;
+  const Position a_, b_, c_;
+  const Direction normal_;
 };
 
 template<typename Material>

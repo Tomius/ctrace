@@ -14,9 +14,6 @@ class NormalVectorColorMapper {
   constexpr Color diffuseColor(Intersection const& intersection) const {
     return color(intersection);
   }
-  constexpr Color specularColor(Intersection const& intersection) const {
-    return color(intersection);
-  }
 
  private:
   constexpr Color color(Intersection const& intersection) const {

@@ -7,7 +7,7 @@ HEADERS := $(shell find -L $(SRC_DIR) -name '*.hpp')
 OBJECTS := $(subst $(SRC_DIR),$(OBJ_DIR),$(CPP_FILES:.cpp=.o))
 
 CXX = clang++
-CXXFLAGS = -Wall -std=c++1y -fconstexpr-steps=100000000 \
+CXXFLAGS = -Wall -std=c++1y -fconstexpr-steps=1000000000 -fconstexpr-depth=1000 \
 					 `pkg-config --cflags Magick++` -Qunused-arguments
 LDFLAGS = `pkg-config --libs Magick++`
 
@@ -15,7 +15,7 @@ LDFLAGS = `pkg-config --libs Magick++`
 
 all: $(BINARY)
 
-# sudo make me a sandwich -j4
+# make me a sandwich -j4
 me: $(BINARY)
 a: $(BINARY)
 sandwich: $(BINARY)

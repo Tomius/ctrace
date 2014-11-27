@@ -5,25 +5,25 @@
 
 namespace ctrace {
 
-// PixelArray<N> defines an N element array of pixels.
-// S defines the number of the starting pixel in the array.
-template<int N, int S>
+// PixelArray<N> defines an N element "array" of pixels.
+// (Color const*)PixelArray<N>* can be used the same way as const Color[N];
+template<unsigned N>
 class PixelArray {
   // Notice how the template recursion depth scales with only log2(N).
-  // So basically you can make arrays of up to 10^77 elements, without
-  // having to change -ftemplate-depth
-  PixelArray<N/2, S> sub_array0_;
-  PixelArray<N-N/2, S+N/2> sub_array1_;
+  const PixelArray<N/2> sub_array0_;
+  const PixelArray<N-N/2> sub_array1_;
 
  public:
-  constexpr PixelArray() { }
+  constexpr PixelArray(unsigned start_pixel_num)
+      : sub_array0_{start_pixel_num}, sub_array1_{start_pixel_num + N/2} { }
 };
 
-template<int S>
-class PixelArray<1, S> {
-  Color pixel_;
+template<>
+class PixelArray<1> {
+  const Color pixel_;
+
  public:
-  constexpr PixelArray() : pixel_{colorOfPixel(S)} {}
+  constexpr PixelArray(unsigned pixel_num) : pixel_{colorOfPixel(pixel_num)} {}
 };
 
 }
