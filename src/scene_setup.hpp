@@ -31,7 +31,7 @@ constexpr auto scene = makeScene(
   makeLightContainer(
     AmbientLight{Color{0.2, 0.2, 0.2}},
     PointLight{Position{-1.5, 4, 0}, Color{5, 4, 3}},
-    PointLight{Position{-2, 2, -2}, Color{2, 4, 6}}
+    PointLight{Position{-1, 2, -2}, Color{2, 4, 6}}
   ),
 
   Camera{

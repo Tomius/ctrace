@@ -6,7 +6,8 @@
 namespace ctrace {
 
 // PixelArray<N> defines an N element "array" of pixels.
-// (Color const*)PixelArray<N>* can be used the same way as const Color[N];
+// reinterpret_cast<Color const*>(PixelArray<N>*) can be
+// used just as static_cast<Color const*>(Color const[N])
 template<unsigned N>
 class PixelArray {
   // Notice how the template recursion depth scales with only log2(N).

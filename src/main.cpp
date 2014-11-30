@@ -1,3 +1,11 @@
+// libstdc++-4.8-dev c++14 mode bugfix
+#include <stdio.h>
+#undef gets
+char *gets(char *p) {
+  scanf("%[^\n]%*c", p);
+  return p;
+}
+
 #include <Magick++.h>
 #include "screen/screen.hpp"
 
