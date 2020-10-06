@@ -30,6 +30,3 @@ Settings
 -------------
 * You can set the image size in `src/scene_settings.hpp`
 * You can modify the scene in `src/scene_setup.hpp`
-
-----------------------
-If you have any problem, please post in the issues tab or mail me at icyplusplus@gmail.com. Any feedback would be appreciated.
